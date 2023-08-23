@@ -1,0 +1,27 @@
+{
+  "verbose": true,
+  "programs": [
+    {
+      "name": "YouTubeMusic",
+      "titleMatch": "^YouTube\\s+Music($|\\s+-\\s+)",
+      "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome_proxy.exe",
+      "args": [
+        "--profile-directory=Default",
+        "--app-id=cinhimbnkkaeohfgghhklpknlkffjgod"
+      ],
+      "startIn": "C:\\Program Files\\Google\\Chrome\\Application"
+    },
+    {
+      "name": "GoogleChat",
+      "titleMatch": "^Google\\s+Chat($|\\s+-\\s+)",
+      "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome_proxy.exe",
+      "args": [
+        "--profile-directory=Profile 1",
+        "--app-id=mdpkiolbdkhdjpekfbkbmhigcaggjagi"
+      ],
+      "startIn": "C:\\Program Files\\Google\\Chrome\\Application"
+    }
+  ]
+}
+
+
