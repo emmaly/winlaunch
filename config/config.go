@@ -1,11 +1,10 @@
-package main
+package config
 
 import (
 	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/emmaly/winlaunch/nillaBool"
 )
@@ -16,29 +15,22 @@ type ProgramConfig struct {
 	Command    string   `json:"command"`
 	Args       []string `json:"args"`
 	StartIn    string   `json:"startIn"`
+	Hotkey     string   `json:"hotkey"`
 }
 
 type Config struct {
 	Verbose  bool            `json:"verbose"`
 	Programs []ProgramConfig `json:"programs"`
-	Program  ProgramConfig   `json:"-"`
+	Args     []string        `json:"-"`
 }
 
-func readConfig() Config {
+func ReadConfig() Config {
 	var configFile string
-	var programName string
 	var verbose nillaBool.NillaBool
 
 	flag.StringVar(&configFile, "config", "config.json", "Path to config file")
-	flag.StringVar(&programName, "program", "", "Name of program to launch")
 	flag.Var(&verbose, "verbose", "Verbose output")
-
 	flag.Parse()
-
-	if programName == "" {
-		fmt.Println("No program name provided")
-		os.Exit(1)
-	}
 
 	data, err := os.ReadFile(configFile)
 	if err != nil {
@@ -53,17 +45,7 @@ func readConfig() Config {
 		os.Exit(1)
 	}
 
-	for _, program := range c.Programs {
-		if strings.EqualFold(program.Name, programName) {
-			c.Program = program
-			break
-		}
-	}
-
-	if c.Program.Name == "" {
-		fmt.Println("Program not found in config file")
-		os.Exit(1)
-	}
+	c.Args = flag.Args()
 
 	if !verbose.IsNull() {
 		if v, isNil := verbose.Get(); !isNil {

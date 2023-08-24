@@ -1,4 +1,6 @@
-package main
+//go:build windows
+
+package window
 
 import (
 	"regexp"
@@ -12,7 +14,7 @@ import (
 // Forward declarations of functions to avoid multiple definitions
 BOOL CheckWindowTitle(HWND hwnd, char* outStr, int maxLen);
 BOOL SetAsForegroundWindow(HWND hwnd);
-BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, UINT_PTR lParam);
 */
 import "C"
 
@@ -23,18 +25,27 @@ func CheckWindowTitle(hwnd C.HWND, outStr *C.char, maxLen C.int) C.BOOL {
 
 //export SetAsForegroundWindow
 func SetAsForegroundWindow(hwnd C.HWND) C.BOOL {
-	if (C.IsIconic(hwnd)) != 0 {
+	isIconic := C.IsIconic(hwnd) != 0
+	isWindowVisible := C.IsWindowVisible(hwnd) != 0
+
+	println("isIconic", isIconic)
+	println("isWindowVisible", isWindowVisible)
+
+	if isIconic || !isWindowVisible {
 		C.ShowWindow(hwnd, C.SW_RESTORE)
 	}
+
+	C.BringWindowToTop(hwnd)
+	C.SetFocus(hwnd)
 	return C.SetForegroundWindow(hwnd)
 }
 
 //export EnumWindowsProc
-func EnumWindowsProc(hwnd C.HWND, lParam C.LPARAM) C.int {
+func EnumWindowsProc(hwnd C.HWND, lParam uintptr) C.int {
 	// return 1 if no match is found, 0 if a match is found
 
 	//nolint:unsafeptr // ptr is safe
-	titleMatch := C.GoString((*C.char)(unsafe.Pointer(uintptr(lParam))))
+	titleMatch := C.GoString((*C.char)(unsafe.Pointer(lParam)))
 
 	const maxLen = 256
 	var buffer [maxLen]C.char
@@ -50,9 +61,6 @@ func EnumWindowsProc(hwnd C.HWND, lParam C.LPARAM) C.int {
 	}
 
 	if matched {
-		if verboseOutput {
-			println("Matched window: ", title)
-		}
 		SetAsForegroundWindow(hwnd)
 		return 0 // match
 	}
@@ -60,7 +68,7 @@ func EnumWindowsProc(hwnd C.HWND, lParam C.LPARAM) C.int {
 	return 1 // no match
 }
 
-func raiseMatchedWindow(titleMatch string) bool {
+func RaiseMatchedWindow(titleMatch string) bool {
 	titleMatchCString := C.CString(titleMatch)
 	defer C.free(unsafe.Pointer(titleMatchCString))
 	result := C.EnumWindows(C.WNDENUMPROC(C.EnumWindowsProc), C.LPARAM(uintptr(unsafe.Pointer(titleMatchCString))))

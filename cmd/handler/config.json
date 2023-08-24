@@ -1,0 +1,48 @@
+{
+  "programs": [
+    {
+      "hotkey": "VK_F13",
+      "name": "Discord",
+      "titleMatch": "(^|\\s+-\\s+)Discord$",
+      "command": "C:\\Users\\emmal\\AppData\\Local\\Discord\\Update.exe",
+      "args": [
+        "--processStart",
+        "Discord.exe"
+      ],
+      "startIn": "C:\\Users\\emmal\\AppData\\Local\\Discord\\app-1.0.9016"
+    },
+    {
+      "hotkey": "VK_F14",
+      "name": "YouTubeMusic",
+      "titleMatch": "^YouTube\\s+Music($|\\s+-\\s+)",
+      "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome_proxy.exe",
+      "args": [
+        "--profile-directory=Default",
+        "--app-id=cinhimbnkkaeohfgghhklpknlkffjgod"
+      ],
+      "startIn": "C:\\Program Files\\Google\\Chrome\\Application"
+    },
+    {
+      "hotkey": "VK_F15",
+      "name": "WorkGoogleChat",
+      "titleMatch": "^Google\\s+Chat($|\\s+-\\s+)",
+      "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome_proxy.exe",
+      "args": [
+        "--profile-directory=Profile 1",
+        "--app-id=mdpkiolbdkhdjpekfbkbmhigcaggjagi"
+      ],
+      "startIn": "C:\\Program Files\\Google\\Chrome\\Application"
+    },
+    {
+      "hotkey": "VK_F16",
+      "name": "WorkGoogleMeet",
+      "titleMatch": "^Google\\s+Meet($|\\s+-\\s+)",
+      "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome_proxy.exe",
+      "args": [
+        "--profile-directory=Profile 1",
+        "--app-id=kjgfgldnnfoeklkmfkjfagphfepbbdan"
+      ],
+      "startIn": "C:\\Program Files\\Google\\Chrome\\Application"
+    }
+  ]
+}
